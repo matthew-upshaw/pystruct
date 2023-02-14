@@ -12,15 +12,15 @@ class FEM2D():
         n_nodes = None
         dof_count = None
 
-        dof_num = np.zeros((n_nodes,2))
+        dof_array = np.zeros((n_nodes,3))
 
         for node_num, node in enumerate(nodes):
             for constraint_num, constraint in enumerate(node['constraints']):
                 if constraint == 0:
                     dof_count += 1
-                    dof_num[node_num, constraint_num] = dof_count
+                    dof_array[node_num, constraint_num] = dof_count
 
-        return dof_count, dof_num
+        return dof_count, dof_array
 
     def get_elem_stiffness_matrix(self, elem):
         A = elem['area']
@@ -40,7 +40,7 @@ class FEM2D():
         return stiffness_matrix
     
     def assemble_global_stiffness(self):
-        n_dof = None
+        n_dof, dof_array = self.fill_global_dof()
         nodes = None
         elems = None
 
@@ -48,4 +48,7 @@ class FEM2D():
         for elem in elems:
             K = self.get_elem_stiffness_matrix(elem)
             for node_num, node in enumerate(elem['nodes']):
-                pass
+                for constraint_num, constraint in enumerate(node['constraints']):
+                    if dof_array[node_num][constraint_num] != 0:
+                        pass
+                    

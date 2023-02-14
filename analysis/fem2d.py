@@ -49,6 +49,6 @@ class FEM2D():
             K = self.get_elem_stiffness_matrix(elem)
             for node_num, node in enumerate(elem['nodes']):
                 for constraint_num, constraint in enumerate(node['constraints']):
-                    if dof_array[node_num][constraint_num] != 0:
+                    if dof_array[node_num, constraint_num] != 0:
                         pass
                     
